@@ -5,12 +5,8 @@ WORKDIR /app
 # Copy everything
 COPY . .
 
-# Install dependencies for API
-WORKDIR /app/api
+# Install dependencies for the entire monorepo (root + workspaces)
 RUN yarn install
-
-# Back to app root
-WORKDIR /app
 
 # Make start script executable
 RUN chmod +x start.sh
