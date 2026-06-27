@@ -5,9 +5,12 @@ WORKDIR /app
 # Copy everything
 COPY . .
 
+# Install Yarn
+RUN npm install -g yarn
+
 # Install dependencies for API
 WORKDIR /app/api
-RUN npm install
+RUN yarn install
 
 # Back to app root
 WORKDIR /app
