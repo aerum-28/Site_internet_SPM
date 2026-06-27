@@ -8,11 +8,8 @@ npm start &
 API_PID=$!
 
 # Wait for API to be ready
-sleep 2
+sleep 3
 
-# Start Caddy
+# Start Caddy in foreground (exec remplace le processus shell)
 cd /app
-caddy run --config Caddyfile
-
-# Cleanup
-kill $API_PID 2>/dev/null || true
+exec caddy run --config Caddyfile
