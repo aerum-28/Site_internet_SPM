@@ -1,0 +1,34 @@
+=== DÉPLOIEMENT SPM CORPORATION ===
+
+STRUCTURE À PLACER SUR LE VPS :
+  public/   → /var/www/spm/public/    (fichiers statiques servis par Nginx)
+  api/      → /var/www/spm/api/       (serveur Node.js)
+
+ÉTAPES :
+
+1. Copier les fichiers sur le VPS (SFTP ou scp) :
+   scp -r public/ api/ user@vps:/var/www/spm/
+
+2. Copier nginx.conf :
+   sudo cp nginx.conf /etc/nginx/sites-available/spm
+   sudo ln -s /etc/nginx/sites-available/spm /etc/nginx/sites-enabled/spm
+   sudo nginx -t && sudo systemctl reload nginx
+
+3. Configurer l'API :
+   cd /var/www/spm/api
+   cp .env.example .env
+   nano .env    ← remplis DATABASE_URL avec tes infos PostgreSQL
+
+4. Installer PM2 et démarrer l'API :
+   npm install -g pm2
+   cd /var/www/spm/api
+   pm2 start dist/index.mjs --name spm-api
+   pm2 save
+   pm2 startup
+
+5. (Optionnel) HTTPS avec Let's Encrypt :
+   sudo apt install certbot python3-certbot-nginx
+   sudo certbot --nginx -d ton-domaine.com
+
+PORT UTILISÉ PAR L'API : 3000
+UPLOADS PHOTOS JOUEURS : api/uploads/players/  (créé automatiquement)
